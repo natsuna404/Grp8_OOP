@@ -1,0 +1,59 @@
+﻿@model List<Bombardiro_Cardealo.Models.Car>
+@{
+    ViewData["Title"] = "Your Wishlist";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Your Wishlist</h1>
+        <span class="badge bg-primary rounded-pill">@Model.Count items</span>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            <h4>Your wishlist is empty</h4>
+            <p>Start by browsing our inventory and adding your favorite cars</p>
+            <a href="/Home/Browse" class="btn btn-primary">Browse Cars</a>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var car in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="~/images/@car.ImageFileName" class="card-img-top" alt="@car.Name" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@car.Name</h5>
+                            <p class="card-text text-success fw-bold">@car.PriceRange</p>
+                        </div>
+                        <div class="card-footer bg-white d-flex justify-content-between">
+                            <form asp-action="Buy" method="post">
+                                <input type="hidden" name="id" value="@car.Id" />
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-shopping-cart me-1"></i>Buy Now
+                                </button>
+                            </form>
+                            <form asp-action="RemoveFromWishlist" method="post">
+                                <input type="hidden" name="id" value="@car.Id" />
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

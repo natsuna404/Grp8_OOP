@@ -1,0 +1,57 @@
+﻿@model List<Bombardiro_Cardealo.Models.Car>
+@{
+    ViewData["Title"] = "Browse Our Inventory";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-croc-dark">Our Inventory</h1>
+        <a href="/Home/AddCar" class="btn btn-croc-primary">
+            <i class="fas fa-plus me-1"></i> Add New Car
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            <h4 class="text-croc-dark">No cars available</h4>
+            <p class="text-croc-dark">Add some vehicles to get started</p>
+            <a href="/Home/AddCar" class="btn btn-croc-primary">Add First Car</a>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var car in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="position-relative">
+                            <img src="~/images/@car.ImageFileName" class="card-img-top" alt="@car.Name" style="height: 200px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <form asp-action="AddToWishlist" method="post">
+                                    <input type="hidden" name="id" value="@car.Id" />
+                                    <button type="submit" class="btn btn-sm" style="background-color: var(--croc-accent);">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-croc-dark">@car.Name</h5>
+                            <p class="card-text fw-bold" style="color: var(--croc-secondary);">@car.PriceRange</p>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <form asp-action="RemoveFromBrowse" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@car.Id" />
+                                <button type="submit" class="btn btn-sm" style="background-color: var(--croc-secondary); color: white;">
+                                    <i class="fas fa-trash me-1"></i>Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
